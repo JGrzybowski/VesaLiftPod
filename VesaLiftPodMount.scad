@@ -2,12 +2,15 @@ include <roundedcube.scad>;
 include <washing.scad>;
 include <shortcuts.scad>;
 
+/*[VESA Mount] */
 mount = 100; // [ 100:100x100, 75:75x75 ]
-cutout = 94;  // [ 10 : 5 : 95 ]
-vesa_h = 5;
-lift_pod_h = 5;
+vesa_h = 5;  // Height of VESA plate in mm
 screw_size = 7; 
 screw_head_size = 12;
+
+cutout = 94;  // [ 10 : 5 : 95 ]
+
+lift_pod_h = 5;
 plate_size = mount + 25;
 vesa_screw_plate_h = 2;
 
@@ -19,27 +22,6 @@ module Vesa(mount = 100, vesa_h, lift_pod_h, inside_cutout = 65){
         translate([-mount/2,  mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
         translate([ mount/2,  mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
     } 
-
-    module vesa_plate(h = vesa_h){
-        difference(){
-            roundedcube([mount+15,mount+15,h], true, radius = 3);
-            //roundedcube([cutout,cutout,10], true, radius = 10);
-        }
-    }
-
-    module top_plate(h = lift_pod_h){
-        roundedcube([plate_size, plate_size, h], true, radius = 5);
-        // difference(){
-        //     union(){
-        //         translate([ plate_size/4, plate_size/4, 0])  roundedcube([plate_size/2, plate_size/2, h], true, radius = 2);
-        //         translate([ plate_size/4,-plate_size/4, 0])  roundedcube([plate_size/2, plate_size/2, h], true, radius = 2);
-        //         translate([-plate_size/4, plate_size/4, 0])  roundedcube([plate_size/2, plate_size/2, h], true, radius = 2);
-        //         translate([-plate_size/4,-plate_size/4, 0])  roundedcube([plate_size/2, plate_size/2, h], true, radius = 2);
-        //     }
-        
-        //     //mount_holes(mount, hole_d+5, h*20);
-        // } 
-    }
     
     socket_d = 20;     
     socket_w = 8;
@@ -69,8 +51,11 @@ module Vesa(mount = 100, vesa_h, lift_pod_h, inside_cutout = 65){
 
     difference(){
         union(){
-            tz(vesa_h/2) vesa_plate(h = vesa_h);
-            tz(lift_pod_h/2+vesa_h-0.001) top_plate();
+            //Vesa Plate
+            tz(vesa_h/2) roundedcube([mount+15,mount+15,vesa_h], true, radius = 3);
+            
+            //Bars Mount Plate
+            tz(lift_pod_h/2+vesa_h-0.001) roundedcube([plate_size, plate_size, lift_pod_h], true, radius = 5);
 
             tz(bars_z) tx(socket_position) mounting_bar();
             tz(bars_z) tx(-socket_position) mounting_bar();
