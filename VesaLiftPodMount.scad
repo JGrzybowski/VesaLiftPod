@@ -95,12 +95,14 @@ module Vesa(mount,  vesa_h, lift_pod_h, inside_cutout){
             //Bars Mount Plate
             tz(lift_pod_h/2+vesa_h-0.001) roundedcube([plate_size, plate_size, lift_pod_h], true, radius = 5);
 
+            //Mount Bars
             tz(bars_z) tx(socket_position) mounting_bar();
             tz(bars_z) tx(-socket_position) mounting_bar();
             
             tz(bars_z) ty(socket_position) rz(90) mounting_bar();
             tz(bars_z) ty(-socket_position) rz(90) mounting_bar();
 
+            //Mount Bars Supports
             tz(vesa_h+lift_pod_h/2) {
                 ty(-socket_position) bar_support(lift_pod_h-17.5+socket_d, (200-socket_d/2-0.43), plate_size);
                 ty(socket_position)  bar_support(lift_pod_h-17.5+socket_d, (200-socket_d/2-0.43), plate_size);
@@ -111,17 +113,13 @@ module Vesa(mount,  vesa_h, lift_pod_h, inside_cutout){
             }
         }
 
-        // external_cutout = 94;
+        // Center cutout
         roundedcube([cutout,cutout,(vesa_h+lift_pod_h+socket_d)*2], true, radius = 10);
+        
+        // Vesa Mount holes
         mount_holes(mount, screw_size, h=100, z=-10);
         mount_holes(mount, screw_head_size, h=100, z=screw_plate_h);
     }
 }
 
-cut = 400;
-difference(){
-    Vesa(mount, vesa_h, lift_pod_h, cutout);
-  
-    // t([0,-cut/2,-10]) cube([cut, cut, 50]);
-    // t([-cut/2,0,-10]) cube([cut, cut, 50]);
-}
+Vesa(mount, vesa_h, lift_pod_h, cutout);
