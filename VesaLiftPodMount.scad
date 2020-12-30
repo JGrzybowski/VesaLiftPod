@@ -36,6 +36,7 @@ module Vesa(mount = 100, vesa_h, lift_pod_h, inside_cutout = 65){
             roundedcube([block_size.z, block_size.y, block_size.x], radius = 10, center=true);
             ty((bar_length-socket_d)/2) socket();
             ty(-(bar_length-socket_d)/2) socket();
+            
         }
     }
 
@@ -45,7 +46,17 @@ module Vesa(mount = 100, vesa_h, lift_pod_h, inside_cutout = 65){
         tz(-w/2-0.01) chopperWheel(od=17.5, id=11.5, t=0.6, nSlots=16, MSR = 1/1.75);
         tz(+w/2+0.01) rx(180) chopperWheel(od=17.5, id=11.5, t=0.6, nSlots=16, MSR = 1/1.75);
     }
-    
+
+    module bar_support(h, top_w, bottom_w){
+        trapezoid = [
+            [   -top_w/2,  h/2],
+            [-bottom_w/2, -h/2],
+            [ bottom_w/2, -h/2],
+            [    top_w/2,  h/2]
+        ];
+            
+        rx(90) linear_extrude(height = socket_w, center = true, convexity = 10) polygon(trapezoid);
+    }  
 
     bars_z = vesa_h+lift_pod_h+9.999;
 
@@ -62,6 +73,15 @@ module Vesa(mount = 100, vesa_h, lift_pod_h, inside_cutout = 65){
             
             tz(bars_z) ty(socket_position) rz(90) mounting_bar();
             tz(bars_z) ty(-socket_position) rz(90) mounting_bar();
+
+            tz(vesa_h+lift_pod_h/2) {
+                ty(-socket_position) bar_support(lift_pod_h, (200-socket_d), plate_size);
+                ty(socket_position)  bar_support(lift_pod_h, (200-socket_d), plate_size);
+                rz(90) {
+                    ty(-socket_position) bar_support(lift_pod_h, (200-socket_d), plate_size);
+                    ty(socket_position) bar_support(lift_pod_h, (200-socket_d), plate_size);
+                }
+            }
         }
 
         // external_cutout = 94;
