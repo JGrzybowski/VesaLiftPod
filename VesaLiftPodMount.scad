@@ -2,25 +2,56 @@ include <roundedcube.scad>;
 include <washing.scad>;
 include <shortcuts.scad>;
 
-/*[VESA Mount] */
-mount = 100; // [ 100:100x100, 75:75x75 ]
-vesa_h = 5;  // Height of VESA plate in mm
-screw_size = 7; 
-screw_head_size = 12;
+/* [VESA Mount] */
 
-cutout = 94;  // [ 10 : 5 : 95 ]
+//Mount standard
+Mount_Size = 100; // [ 100:100x100, 75:75x75 ]
 
-lift_pod_h = 5;
-plate_size = mount + 25;
-vesa_screw_plate_h = 2;
+// Height of the part of VESA plate outside the mount (mm)
+External_VESA_Plate_Height = 5;  
+// Height of the part of VESA plate inside the mount - provides more rigidity (mm)
+Internal_VESA_PlateHeight = 3;
 
-module Vesa(mount = 100, vesa_h, lift_pod_h, inside_cutout = 65){
+// VESA mount screw thread diameter (mm)
+Screw_Thread_Diameter = 7; 
 
+// VESA mount screw Head or Washer diameter (mm)
+Screw_Head_Diameter = 12;
+
+// Height of the plate under the screw (mm)
+Screw_plate_Thickness = 2;
+
+
+/* [ General ] */
+
+//Height of LiftPod plate (without height of the sockets)
+LiftPod_Plate_Size = 5;
+
+// Size of the cutout in the center of the Mount - reduces required matrial
+Center_Cutout_Size = 94;
+
+// ------------------------------------------------------
+/* [ Hidden ] */
+mount = Mount_Size;
+
+vesa_h = External_VESA_Plate_Height + Internal_VESA_PlateHeight; 
+lift_pod_h = Internal_VESA_PlateHeight;
+
+screw_size = Screw_Thread_Diameter; 
+screw_head_size = Screw_Head_Diameter;
+screw_plate_h = Screw_plate_Thickness;
+
+cutout = Center_Cutout_Size;
+
+module Vesa(mount, h, lift_pod_h, inside_cutout){
+    plate_size = 125;
+
+    vesa_h = h-lift_pod_h;
     module mount_holes(mount = mount, d, h, z = 0){
-        translate([-mount/2, -mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
-        translate([ mount/2, -mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
-        translate([-mount/2,  mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
-        translate([ mount/2,  mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
+        t([-mount/2, -mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
+        t([ mount/2, -mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
+        t([-mount/2,  mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
+        t([ mount/2,  mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
     } 
     
     socket_d = 20;     
@@ -63,10 +94,10 @@ module Vesa(mount = 100, vesa_h, lift_pod_h, inside_cutout = 65){
     difference(){
         union(){
             //Vesa Plate
-            tz(vesa_h/2) roundedcube([mount+15,mount+15,vesa_h], true, radius = 3);
+            tz(vesa_h/2+lift_pod_h/2) roundedcube([mount+15,mount+15,vesa_h+lift_pod_h], true, radius = 3);
             
             //Bars Mount Plate
-            tz(lift_pod_h/2+vesa_h-0.001) roundedcube([plate_size, plate_size, lift_pod_h], true, radius = 5);
+            //tz(lift_pod_h/2+vesa_h-0.001) roundedcube([plate_size, plate_size, lift_pod_h], true, radius = 5);
 
             tz(bars_z) tx(socket_position) mounting_bar();
             tz(bars_z) tx(-socket_position) mounting_bar();
@@ -87,7 +118,7 @@ module Vesa(mount = 100, vesa_h, lift_pod_h, inside_cutout = 65){
         // external_cutout = 94;
         roundedcube([cutout,cutout,(vesa_h+lift_pod_h+socket_d)*2], true, radius = 10);
         mount_holes(mount, screw_size, h=100, z=-10);
-        mount_holes(mount, screw_head_size, h=100, z=2);
+        mount_holes(mount, screw_head_size, h=100, z=screw_plate_h);
     }
 }
 
@@ -95,6 +126,6 @@ cut = 400;
 difference(){
     Vesa(mount, vesa_h, lift_pod_h, cutout);
   
-    // translate([0,-cut/2,-10]) cube([cut, cut, 50]);
-    // translate([-cut/2,0,-10]) cube([cut, cut, 50]);
+    // t([0,-cut/2,-10]) cube([cut, cut, 50]);
+    // t([-cut/2,0,-10]) cube([cut, cut, 50]);
 }
