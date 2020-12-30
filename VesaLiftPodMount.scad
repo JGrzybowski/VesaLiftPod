@@ -102,11 +102,11 @@ module Vesa(mount,  vesa_h, lift_pod_h, inside_cutout){
             tz(bars_z) ty(-socket_position) rz(90) mounting_bar();
 
             tz(vesa_h+lift_pod_h/2) {
-                ty(-socket_position) bar_support(lift_pod_h, (200-socket_d), plate_size);
-                ty(socket_position)  bar_support(lift_pod_h, (200-socket_d), plate_size);
+                ty(-socket_position) bar_support(lift_pod_h-17.5+socket_d, (200-socket_d/2-0.43), plate_size);
+                ty(socket_position)  bar_support(lift_pod_h-17.5+socket_d, (200-socket_d/2-0.43), plate_size);
                 rz(90) {
-                    ty(-socket_position) bar_support(lift_pod_h, (200-socket_d), plate_size);
-                    ty(socket_position) bar_support(lift_pod_h, (200-socket_d), plate_size);
+                    ty(-socket_position) bar_support(lift_pod_h-17.5+socket_d, (200-socket_d/2-0.43), plate_size);
+                    ty(socket_position) bar_support(lift_pod_h-17.5+socket_d, (200-socket_d/2-0.43), plate_size);
                 }
             }
         }
