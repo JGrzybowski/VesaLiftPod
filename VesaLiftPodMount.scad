@@ -7,35 +7,31 @@ include <shortcuts.scad>;
 //Mount standard
 Mount_Size = 100; // [ 100:100x100, 75:75x75 ]
 
-// Height of the part of VESA plate outside the mount (mm)
-External_VESA_Plate_Height = 5;  
-// Height of the part of VESA plate inside the mount - provides more rigidity (mm)
-Internal_VESA_PlateHeight = 3;
+// Height of the part of VESA plate outside the mount
+External_Plate_Height = 5;  
 
-// VESA mount screw thread diameter (mm)
+// Height of the part of VESA plate inside the mount - provides more rigidity and which connects VESA Mount with sockets
+Internal_Plate_Height = 3;
+
+// VESA mount screw thread diameter
 Screw_Thread_Diameter = 7; 
 
-// VESA mount screw Head or Washer diameter (mm)
+// VESA mount screw Head or Washer diameter
 Screw_Head_Diameter = 12;
 
-// Height of the plate under the screw (mm)
+// Height of the plate under the screw
 Screw_plate_Thickness = 2;
 
-
-/* [ General ] */
-
-//Height of LiftPod plate (without height of the sockets)
-LiftPod_Plate_Size = 5;
+/* [General] */
 
 // Size of the cutout in the center of the Mount - reduces required matrial
 Center_Cutout_Size = 94;
 
 // ------------------------------------------------------
-/* [ Hidden ] */
 mount = Mount_Size;
 
-vesa_h = External_VESA_Plate_Height + Internal_VESA_PlateHeight; 
-lift_pod_h = Internal_VESA_PlateHeight;
+vesa_h = External_Plate_Height; 
+lift_pod_h = Internal_Plate_Height;
 
 screw_size = Screw_Thread_Diameter; 
 screw_head_size = Screw_Head_Diameter;
@@ -43,10 +39,10 @@ screw_plate_h = Screw_plate_Thickness;
 
 cutout = Center_Cutout_Size;
 
-module Vesa(mount, h, lift_pod_h, inside_cutout){
+module Vesa(mount,  vesa_h, lift_pod_h, inside_cutout){
     plate_size = 125;
 
-    vesa_h = h-lift_pod_h;
+    // vesa_h = h-lift_pod_h;
     module mount_holes(mount = mount, d, h, z = 0){
         t([-mount/2, -mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
         t([ mount/2, -mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
@@ -94,10 +90,10 @@ module Vesa(mount, h, lift_pod_h, inside_cutout){
     difference(){
         union(){
             //Vesa Plate
-            tz(vesa_h/2+lift_pod_h/2) roundedcube([mount+15,mount+15,vesa_h+lift_pod_h], true, radius = 3);
+            tz(vesa_h/2) roundedcube([mount+15,mount+15,vesa_h], true, radius = 3);
             
             //Bars Mount Plate
-            //tz(lift_pod_h/2+vesa_h-0.001) roundedcube([plate_size, plate_size, lift_pod_h], true, radius = 5);
+            tz(lift_pod_h/2+vesa_h-0.001) roundedcube([plate_size, plate_size, lift_pod_h], true, radius = 5);
 
             tz(bars_z) tx(socket_position) mounting_bar();
             tz(bars_z) tx(-socket_position) mounting_bar();
