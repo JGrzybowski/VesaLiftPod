@@ -14,7 +14,7 @@ External_Plate_Height = 5;
 Internal_Plate_Height = 3;
 
 // VESA mount screw thread diameter
-Screw_Thread_Diameter = 7; 
+Screw_Thread_Diameter = 4.5; 
 
 // VESA mount screw Head or Washer diameter
 Screw_Head_Diameter = 12;
@@ -40,9 +40,13 @@ screw_plate_h = Screw_plate_Thickness;
 cutout = Center_Cutout_Size;
 
 module Vesa(mount,  vesa_h, lift_pod_h, inside_cutout){
+    socket_d = 20;     
+    socket_w = 8;
+    socket_position = (125-8)/2;
     plate_size = 125;
 
-    // vesa_h = h-lift_pod_h;
+    bar_length = 200;
+
     module mount_holes(mount = mount, d, h, z = 0){
         t([-mount/2, -mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
         t([ mount/2, -mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
@@ -50,13 +54,8 @@ module Vesa(mount,  vesa_h, lift_pod_h, inside_cutout){
         t([ mount/2,  mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
     } 
     
-    socket_d = 20;     
-    socket_w = 8;
-    socket_position = (125-8)/2;
-
     module mounting_bar(){
         hole_center = [0,socket_d/2,-0.001];
-        bar_length = 200;
         block_size = [socket_w, bar_length, socket_d];
         
         ry(90) difference(){
@@ -93,7 +92,7 @@ module Vesa(mount,  vesa_h, lift_pod_h, inside_cutout){
             tz(vesa_h/2) roundedcube([mount+15,mount+15,vesa_h], true, radius = 3);
             
             //Bars Mount Plate
-            tz(lift_pod_h/2+vesa_h-0.001) roundedcube([plate_size, plate_size, lift_pod_h], true, radius = 5);
+            tz(lift_pod_h/2+vesa_h-0.001) roundedcube([plate_size, plate_size, lift_pod_h], center = true);
 
             //Mount Bars
             tz(bars_z) tx(socket_position) mounting_bar();
@@ -103,12 +102,12 @@ module Vesa(mount,  vesa_h, lift_pod_h, inside_cutout){
             tz(bars_z) ty(-socket_position) rz(90) mounting_bar();
 
             //Mount Bars Supports
-            tz(vesa_h+lift_pod_h/2) {
-                ty(-socket_position) bar_support(lift_pod_h-17.5+socket_d, (200-socket_d/2-0.43), plate_size);
-                ty(socket_position)  bar_support(lift_pod_h-17.5+socket_d, (200-socket_d/2-0.43), plate_size);
+            tz(vesa_h+lift_pod_h/2-0.001) {
+                ty(-socket_position) bar_support(lift_pod_h, (bar_length-socket_d), plate_size);
+                ty(socket_position)  bar_support(lift_pod_h, (bar_length-socket_d), plate_size);
                 rz(90) {
-                    ty(-socket_position) bar_support(lift_pod_h-17.5+socket_d, (200-socket_d/2-0.43), plate_size);
-                    ty(socket_position) bar_support(lift_pod_h-17.5+socket_d, (200-socket_d/2-0.43), plate_size);
+                    ty(-socket_position) bar_support(lift_pod_h, (bar_length-socket_d), plate_size);
+                    ty(socket_position) bar_support(lift_pod_h, (bar_length-socket_d), plate_size);
                 }
             }
         }

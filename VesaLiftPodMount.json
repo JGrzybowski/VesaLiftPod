@@ -1,43 +1,42 @@
 {
-  "parameterSets": {
-    "Basic 100x100": {
-      "Center_Cutout_Size": "94",
-      "External_VESA_Plate_Height": "5",
-      "Internal_VESA_PlateHeight": "3",
-      "LiftPod_Plate_Size": "5",
-      "Mount_Size": "100",
-      "Screw_Head_Diameter": "12",
-      "Screw_Thread_Diameter": "7",
-      "Screw_plate_Thickness": "2"
+    "parameterSets": {
+        "Basic 75x75": {
+            "Center_Cutout_Size": "69",
+            "External_Plate_Height": "5",
+            "Internal_Plate_Height": "5",
+            "Mount_Size": "75",
+            "Screw_Head_Diameter": "12",
+            "Screw_Thread_Diameter": "7",
+            "Screw_plate_Thickness": "2"
+        },
+        "Less Supports 100x100": {
+            "Center_Cutout_Size": "94",
+            "External_Plate_Height": "5",
+            "Internal_Plate_Height": "20",
+            "Mount_Size": "100",
+            "Screw_Head_Diameter": "12",
+            "Screw_Thread_Diameter": "7",
+            "Screw_plate_Thickness": "2"
+        },
+        "Less Supports 75x75": {
+            "Center_Cutout_Size": "69",
+            "External_Plate_Height": "5",
+            "Internal_Plate_Height": "20",
+            "Mount_Size": "75",
+            "Screw_Head_Diameter": "12",
+            "Screw_Thread_Diameter": "7",
+            "Screw_plate_Thickness": "2"
+        },
+        "Basic 100x100": {
+            "Center_Cutout_Size": "94",
+            "External_Plate_Height": "5",
+            "Internal_Plate_Height": "5",
+            "Mount_Size": "100",
+            "Screw_Head_Diameter": "12",
+            "Screw_Thread_Diameter": "4.5",
+            "Screw_plate_Thickness": "3"
+        }
     },
-    "Basic 75x75": {
-      "Center_Cutout_Size": "69",
-      "External_Plate_Height": "5",
-      "Internal_Plate_Height": "5",
-      "Mount_Size": "75",
-      "Screw_Head_Diameter": "12",
-      "Screw_Thread_Diameter": "7",
-      "Screw_plate_Thickness": "2"
-    },
-    "Less Supports 100x100": {
-      "Center_Cutout_Size": "94",
-      "External_Plate_Height": "5",
-      "Internal_Plate_Height": "20",
-      "Mount_Size": "100",
-      "Screw_Head_Diameter": "12",
-      "Screw_Thread_Diameter": "7",
-      "Screw_plate_Thickness": "2"
-    },
-    "Less Supports 75x75": {
-      "Center_Cutout_Size": "69",
-      "External_Plate_Height": "5",
-      "Internal_Plate_Height": "20",
-      "Mount_Size": "75",
-      "Screw_Head_Diameter": "12",
-      "Screw_Thread_Diameter": "7",
-      "Screw_plate_Thickness": "2"
-    }
-  },
-  "parameterSets": "",
-  "fileFormatVersion": "1"
+    "parameterSets": "",
+    "fileFormatVersion": "1"
 }
