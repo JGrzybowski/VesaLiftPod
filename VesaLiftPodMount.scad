@@ -1,6 +1,6 @@
-include <roundedcube.scad>;
-include <washing.scad>;
-include <shortcuts.scad>;
+include <lib/roundedcube.scad>;
+include <lib/washing.scad>;
+include <lib/shortcuts.scad>;
 
 /* [VESA Mount] */
 
@@ -26,6 +26,8 @@ Screw_plate_Thickness = 2;
 
 // Size of the cutout in the center of the Mount - reduces required matrial
 Center_Cutout_Size = 94;
+
+Support_Bars = true; //[on:true, off:false]
 
 // ------------------------------------------------------
 mount = Mount_Size;
@@ -102,12 +104,14 @@ module Vesa(mount,  vesa_h, lift_pod_h, inside_cutout){
             tz(bars_z) ty(-socket_position) rz(90) mounting_bar();
 
             //Mount Bars Supports
-            tz(vesa_h+lift_pod_h/2-0.001) {
-                ty(-socket_position) bar_support(lift_pod_h, (bar_length-socket_d), plate_size);
-                ty(socket_position)  bar_support(lift_pod_h, (bar_length-socket_d), plate_size);
-                rz(90) {
+            if(Support_Bars) {
+                tz(vesa_h+lift_pod_h/2-0.001) {
                     ty(-socket_position) bar_support(lift_pod_h, (bar_length-socket_d), plate_size);
-                    ty(socket_position) bar_support(lift_pod_h, (bar_length-socket_d), plate_size);
+                    ty(socket_position)  bar_support(lift_pod_h, (bar_length-socket_d), plate_size);
+                    rz(90) {
+                        ty(-socket_position) bar_support(lift_pod_h, (bar_length-socket_d), plate_size);
+                        ty(socket_position) bar_support(lift_pod_h, (bar_length-socket_d), plate_size);
+                    }
                 }
             }
         }
