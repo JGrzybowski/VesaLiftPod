@@ -12,7 +12,15 @@ if (-not (Test-Path $releaseDir)) { New-Item $releaseDir -ItemType "Directory" }
 Get-Content $files | Select-Object -Skip 4 | Add-Content $releasedScad
 Copy-Item VesaLiftPodMount.json $releasedJson
 
-$parameterSets = "Basic 75x75", "Basic 100x100"
+Remove-Item 
+$parameterSets = `
+    "Basic 75x75", `
+    "Basic 100x100", `
+    "Tall Supports 75x75", `
+    "Tall Supports 100x100", `
+    "No Supports 75x75", `
+    "No Supports 100x100"
+                 
 foreach ($parameterSet in $parameterSets) {
     $stlFile = Join-Path $releaseDir "VesaLiftPod_${v}_${parameterSet}.stl" 
     &$openscad -p "VesaLiftPodMount.json" -P $parameterSet -o $stlFile "VesaLiftPodMount.scad" | Out-File "${stlFile}.log"
