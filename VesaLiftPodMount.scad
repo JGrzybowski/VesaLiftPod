@@ -1,5 +1,5 @@
 include <lib/roundedcube.scad>;
-include <lib/washing.scad>;
+include <lib/lockingSlot.scad>;
 include <lib/shortcuts.scad>;
 
 /* [VESA Mount] */
@@ -71,8 +71,8 @@ module Vesa(mount,  vesa_h, lift_pod_h, inside_cutout){
     //hole and locking drilling
     module socket(w = socket_w){
         cylinder(r=5, h=100, center=true);
-        tz(-w/2-0.01) chopperWheel(od=17.5, id=11.5, t=0.6, nSlots=16, MSR = 1/1.75);
-        tz(+w/2+0.01) rx(180) chopperWheel(od=17.5, id=11.5, t=0.6, nSlots=16, MSR = 1/1.75);
+        tz(-w/2-0.01) lockingSlot(od=17.5, id=11.5, t=0.6, nSlots=16, MSR = 1/1.75);
+        tz(+w/2+0.01) rx(180) lockingSlot(od=17.5, id=11.5, t=0.6, nSlots=16, MSR = 1/1.75);
     }
 
     module bar_support(h, top_w, bottom_w){

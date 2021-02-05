@@ -1,7 +1,8 @@
 include <shortcuts.scad>;
 include <shapesAndCuttingTools.scad>;
+
 $fn=24;
-module chopperWheel(od = 100, id = 25.5, t=1, nSlots = 20, MSR = 0.5){
+module lockingSlot(od = 100, id = 25.5, t=1, nSlots = 20, MSR = 0.5){
     //od = wheel outer diameter
     //id = wheel inner diameter
     //t = thickness of disk
