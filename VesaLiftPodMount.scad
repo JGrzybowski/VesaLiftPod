@@ -27,6 +27,7 @@ Screw_plate_Thickness = 2;
 // Size of the cutout in the center of the Mount - reduces required matrial
 Center_Cutout_Size = 94;
 
+// Should LiftPod mounts have additional support(angle depends on the height of the external plate)
 Support_Bars = true; //[on:true, off:false]
 
 // ------------------------------------------------------
