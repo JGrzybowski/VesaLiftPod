@@ -48,10 +48,9 @@ module Vesa(mount,  vesa_h, lift_pod_h, inside_cutout){
     bar_length = 200;
 
     module mount_holes(mount = mount, d, h, z = 0){
-        t([-mount/2, -mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
-        t([ mount/2, -mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
-        t([-mount/2,  mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
-        t([ mount/2,  mount/2, z+h/2]) cylinder(d = d, h = h, center = true);
+        for(x =[-mount/2, mount/2])
+        for(y =[-mount/2, mount/2])
+            t([ x, y, z+h/2]) cylinder(d = d, h = h, center = true);
     }
 
     module bar_support(h, top_w, bottom_w){
@@ -65,30 +64,33 @@ module Vesa(mount,  vesa_h, lift_pod_h, inside_cutout){
         rx(90) linear_extrude(height = Socket_w, center = true, convexity = 10) polygon(trapezoid);
     }  
 
-    bars_z = vesa_h+lift_pod_h+9.999;
+    vesa_z     = vesa_h/2;
+    plate_z    = vesa_h+lift_pod_h/2-0.001;
+    bars_z     = vesa_h+lift_pod_h+Socket_d/2-0.001;
+    supports_z = plate_z;
 
     difference(){
         union(){
             //Vesa Plate
-            tz(vesa_h/2) roundedcube([mount+15,mount+15,vesa_h], true, radius = 3);
+            tz(vesa_z) roundedcube([mount+15,mount+15,vesa_h], true, radius = 3);
             
             //Bars Mount Plate
-            tz(lift_pod_h/2+vesa_h-0.001) roundedcube([plate_size, plate_size, lift_pod_h], center = true);
+            tz(plate_z) roundedcube([plate_size, plate_size, lift_pod_h], center = true);
 
             //Mount Bars
-            t([ Socket_spacing_base/2,0,bars_z]) ry(90)        liftPodArm(bar_length);
-            t([-Socket_spacing_base/2,0,bars_z]) ry(90)        liftPodArm(bar_length);
+            t([ Socket_spacing_base/2,0,bars_z])        ry(90) liftPodArm(bar_length);
+            t([-Socket_spacing_base/2,0,bars_z])        ry(90) liftPodArm(bar_length);
             t([0, Socket_spacing_base/2,bars_z]) rz(90) ry(90) liftPodArm(bar_length);
             t([0,-Socket_spacing_base/2,bars_z]) rz(90) ry(90) liftPodArm(bar_length);
 
             //Mount Bars Supports
             if(Support_Bars) {
-                tz(vesa_h+lift_pod_h/2-0.001) {
+                tz(supports_z) {
                     ty(-Socket_spacing_base/2) bar_support(lift_pod_h, (bar_length-Socket_d), plate_size);
-                    ty(Socket_spacing_base/2)  bar_support(lift_pod_h, (bar_length-Socket_d), plate_size);
+                    ty( Socket_spacing_base/2) bar_support(lift_pod_h, (bar_length-Socket_d), plate_size);
                     rz(90) {
                         ty(-Socket_spacing_base/2) bar_support(lift_pod_h, (bar_length-Socket_d), plate_size);
-                        ty(Socket_spacing_base/2) bar_support(lift_pod_h, (bar_length-Socket_d), plate_size);
+                        ty( Socket_spacing_base/2) bar_support(lift_pod_h, (bar_length-Socket_d), plate_size);
                     }
                 }
             }
