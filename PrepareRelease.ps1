@@ -1,27 +1,42 @@
-$v = "1.0"
-$files = "VesaLiftPodMount.scad", "lib\*.scad"
+param([switch] $VesaMount, [switch]$SpinArm)
+
+$vVesaMount = "1.0"
+$VesaFile = "VesaLiftPodMount.scad"
+$VesaParamsFile = "VesaLiftPodMount.json"
+
+$vSpinArm = "1.0" 
+$SpinArmFile = "SpinArmLiftPod.scad"
+$SpinArmParamsFile = "SpinArmLiftPod.json"
+
+$libFiles = "VesaLiftPodMount.scad", "lib\*.scad"
 
 $openscad = "C:\Program Files\OpenSCAD\openscad.exe"
 
-$releaseDir = Join-Path publish $v
-$releasedScad = Join-Path $releaseDir "VesaLiftPod_$v.scad"
-$releasedJson = Join-Path $releaseDir "VesaLiftPod_$v.json"
+if ($VesaMount) {
+    New-STLsPackage -Name "VesaLiftPod" -MainFile $VesaFile -LibFiles $libFiles -ParametersFile $VesaParamsFile -Version $vVesaMount
+}
+if ($SpinArm) {
+    New-STLsPackage -Name "LiftPodSpinArm" -MainFile $SpinArmFile -LibFiles $libFiles -ParametersFile $SpinArmParamsFile -Version $vSpinArm
+}
 
-if (-not (Test-Path $releaseDir)) { New-Item $releaseDir -ItemType "Directory" }
+function New-STLsPackage {
+    param ($Name, $MainFile, $LibFiles, $ParametersFile, $Version)
 
-Get-Content $files | Select-Object -Skip 4 | Add-Content $releasedScad
-Copy-Item VesaLiftPodMount.json $releasedJson
+    $releaseDir = Join-Path publish "${Name}_${Version}"
+    $releasedScad = Join-Path $releaseDir "${Name}_${Version}.scad"
+    $releasedJson = Join-Path $releaseDir "${Name}_${Version}.json"
 
-Remove-Item 
-$parameterSets = `
-    "Basic 75x75", `
-    "Basic 100x100", `
-    "Tall Supports 75x75", `
-    "Tall Supports 100x100", `
-    "No Supports 75x75", `
-    "No Supports 100x100"
-                 
-foreach ($parameterSet in $parameterSets) {
-    $stlFile = Join-Path $releaseDir "VesaLiftPod_${v}_${parameterSet}.stl" 
-    &$openscad -p "VesaLiftPodMount.json" -P $parameterSet -o $stlFile "VesaLiftPodMount.scad" | Out-File "${stlFile}.log"
+    #Create Release dir
+    if (-not (Test-Path $releaseDir)) { New-Item $releaseDir -ItemType "Directory" }
+
+    #Compile files into one
+    Get-Content $files | Select-Object -Skip 4 | Add-Content $releasedScad
+    Copy-Item VesaLiftPodMount.json $releasedJson
+    
+    #Generate predefined STLs
+    $parameterSets = (Get-Content $ParametersFile -Raw | ConvertFrom-Json).parameterSets.psobject.properties.name         
+    foreach ($parameterSet in $parameterSets) {
+        $stlFile = Join-Path $releaseDir "${Name}_${Version}_${parameterSet}.stl" 
+        & $openscad -p $ParametersFile -P $parameterSet -o $stlFile $MainFile | Out-File "${stlFile}.log"
+    }
 }
