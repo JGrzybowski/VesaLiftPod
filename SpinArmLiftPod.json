@@ -1,0 +1,41 @@
+{
+  "parameterSets": {
+    "Horizontal_A Vertical_A": {
+      "Horizontal_connector_width": "Socket_spacing_arms_inner",
+      "Vertical_connector_width": "Socket_spacing_arms_inner"
+    },
+    "Horizontal_A Vertical_B": {
+      "Horizontal_connector_width": "Socket_spacing_arms_inner",
+      "Vertical_connector_width": "Socket_spacing_arms"
+    },
+    "Horizontal_A Vertical_Base": {
+      "Horizontal_connector_width": "Socket_spacing_arms_inner",
+      "Vertical_connector_width": "Socket_spacing_base"
+    },
+    "Horizontal_B Vertical_A": {
+      "Horizontal_connector_width": "Socket_spacing_arms",
+      "Vertical_connector_width": "Socket_spacing_arms_inner"
+    },
+    "Horizontal_B Vertical_B": {
+      "Horizontal_connector_width": "Socket_spacing_arms",
+      "Vertical_connector_width": "Socket_spacing_arms"
+    },
+    "Horizontal_B Vertical_Base": {
+      "Horizontal_connector_width": "Socket_spacing_arms",
+      "Vertical_connector_width": "Socket_spacing_base"
+    },
+    "Horizontal_Base Vertical_A": {
+      "Horizontal_connector_width": "Socket_spacing_base",
+      "Vertical_connector_width": "Socket_spacing_arms_inner"
+    },
+    "Horizontal_Base Vertical_B": {
+      "Horizontal_connector_width": "Socket_spacing_base",
+      "Vertical_connector_width": "Socket_spacing_arms"
+    },
+    "Horizontal_Base Vertical_Base": {
+      "Horizontal_connector_width": "Socket_spacing_base",
+      "Vertical_connector_width": "Socket_spacing_base"
+    }
+  },
+  "fileFormatVersion": "1"
+}

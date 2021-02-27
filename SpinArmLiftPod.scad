@@ -4,14 +4,18 @@ include <lib/shortcuts.scad>;
 
 /* [ Horizontal ] */
 Horizontal_connector_length = 60; 
-Horizontal_connector_width = "Socket_spacing_arms"; //[Socket_spacing_base : Base, Socket_spacing_arms : Middle Arms, Socket_spacing_arms_inner : Inner Arms ]
-BaseMountSocketsInside = false; 
-BaseMountSocketsOutside = false; 
+Horizontal_connector_width = "Socket_spacing_arms"; //[Socket_spacing_base : Base plate distance, Socket_spacing_arms : Middle Arms / B extender arms distance, Socket_spacing_arms_inner : Inner Arms / A extender arms distance ]
+BaseMountSocketsInside = Horizontal_connector_width == "Socket_spacing_arms_inner"; 
 
 /* [ Vertical ] */
-Vertical_connector_length = Socket_spacing_base+30;
-Vertical_connector_width = "Socket_spacing_arms"; //[Socket_spacing_base : Base, Socket_spacing_arms : Middle Arms, Socket_spacing_arms_inner : Inner Arms ]
-RotatedMountSocketsInside = false; 
+Vertical_connector_length = 50;
+Vertical_connector_offset = 30;
+Vertical_connector_width = "Socket_spacing_arms"; //[Socket_spacing_base : Base plate distance, Socket_spacing_arms : Middle Arms / B extender arms distance, Socket_spacing_arms_inner : Inner Arms / A extender arms distance ]
+RotatedMountSocketsInside = Vertical_connector_width == "Socket_spacing_arms_inner"; 
+
+/* [Hidden] */
+// Change these values only if you know what you are doing, hexagonal screwhead sockets on the outside of arm are probably not what you want.
+BaseMountSocketsOutside = false; 
 RotatedMountSocketsOutside = false;
 
 BaseMountWidth = (Horizontal_connector_width == "Socket_spacing_base") ? Socket_spacing_base
@@ -21,6 +25,9 @@ BaseMountWidth = (Horizontal_connector_width == "Socket_spacing_base") ? Socket_
 RotatedMountWidth = (Vertical_connector_width == "Socket_spacing_base") ? Socket_spacing_base
                   : (Vertical_connector_width == "Socket_spacing_arms") ? Socket_spacing_arms
                   : (Vertical_connector_width == "Socket_spacing_arms_inner") ? Socket_spacing_arms_inner : 0;
+
+// Default values of those are quite good to not to mess with them
+Vertical_arm_length = RotatedMountWidth + Vertical_connector_offset + Socket_w;
 
 module spin_arm(arms_l, base_l){
 
@@ -33,7 +40,7 @@ module spin_arm(arms_l, base_l){
     ty(arms_l/2) 
         roundedcube([BaseMountWidth+Socket_w, joint_thickness, Socket_d], radius=joint_round, center=true);
     
-    base_bars_h = 50;
+    base_bars_h = Vertical_connector_length;
     base_thickness = Socket_w;
     tx(BaseMountWidth/2) ty(arms_l/2+base_l/2-joint_round){
         roundedcube([base_thickness, base_l, Socket_d], radius = joint_round, center = true);
@@ -61,6 +68,6 @@ module spin_arm(arms_l, base_l){
     linear_extrude(height = Socket_d, center = true, convexity = 10) polygon(trapezoid2); 
 }
 
-spin_arm(Horizontal_connector_length, Vertical_connector_length);
+spin_arm(Horizontal_connector_length, Vertical_arm_length);
 
 
