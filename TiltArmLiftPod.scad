@@ -29,7 +29,7 @@ RotatedMountWidth = (Vertical_connector_width == "Socket_spacing_base") ? Socket
 // Default values of those are quite good to not to mess with them
 Vertical_arm_length = RotatedMountWidth + Vertical_connector_offset + Socket_w;
 
-module spin_arm(arms_l, base_l){
+module tilt_arm(arms_l, base_l){
 
     joint_round = Socket_w/2;
     joint_thickness = Socket_w;
@@ -68,6 +68,6 @@ module spin_arm(arms_l, base_l){
     linear_extrude(height = Socket_d, center = true, convexity = 10) polygon(trapezoid2); 
 }
 
-spin_arm(Horizontal_connector_length, Vertical_arm_length);
+tilt_arm(Horizontal_connector_length, Vertical_arm_length);
 
 

@@ -1,28 +1,21 @@
-param([switch] $VesaMount, [switch]$SpinArm)
+param([switch] $VesaMount, [switch]$TiltArm)
 
 $vVesaMount = "1.0"
 $VesaFile = "VesaLiftPodMount.scad"
 $VesaParamsFile = "VesaLiftPodMount.json"
 
-$vSpinArm = "1.0" 
-$SpinArmFile = "SpinArmLiftPod.scad"
-$SpinArmParamsFile = "SpinArmLiftPod.json"
+$vTiltArm = "1.0" 
+$TiltArmFile = "TiltArmLiftPod.scad"
+$TiltArmParamsFile = "TiltArmLiftPod.json"
 
-$libFiles = "VesaLiftPodMount.scad", "lib\*.scad"
-
-$openscad = "C:\Program Files\OpenSCAD\openscad.exe"
-
-if ($VesaMount) {
-    New-STLsPackage -Name "VesaLiftPod" -MainFile $VesaFile -LibFiles $libFiles -ParametersFile $VesaParamsFile -Version $vVesaMount
-}
-if ($SpinArm) {
-    New-STLsPackage -Name "LiftPodSpinArm" -MainFile $SpinArmFile -LibFiles $libFiles -ParametersFile $SpinArmParamsFile -Version $vSpinArm
-}
+$libFiles = "lib\*.scad"
 
 function New-STLsPackage {
     param ($Name, $MainFile, $LibFiles, $ParametersFile, $Version)
 
-    $releaseDir = Join-Path publish "${Name}_${Version}"
+    $openscad = "C:\Program Files\OpenSCAD\openscad.exe"
+
+    $releaseDir = Join-Path "publish" "${Name}_${Version}"
     $releasedScad = Join-Path $releaseDir "${Name}_${Version}.scad"
     $releasedJson = Join-Path $releaseDir "${Name}_${Version}.json"
 
@@ -30,6 +23,7 @@ function New-STLsPackage {
     if (-not (Test-Path $releaseDir)) { New-Item $releaseDir -ItemType "Directory" }
 
     #Compile files into one
+    $files = $MainFile, $libFiles
     Get-Content $files | Select-Object -Skip 4 | Add-Content $releasedScad
     Copy-Item VesaLiftPodMount.json $releasedJson
     
@@ -39,4 +33,11 @@ function New-STLsPackage {
         $stlFile = Join-Path $releaseDir "${Name}_${Version}_${parameterSet}.stl" 
         & $openscad -p $ParametersFile -P $parameterSet -o $stlFile $MainFile | Out-File "${stlFile}.log"
     }
+}
+
+if ($VesaMount) {
+    New-STLsPackage -Name "VesaLiftPod" -MainFile $VesaFile -LibFiles $libFiles -ParametersFile $VesaParamsFile -Version $vVesaMount
+}
+if ($TiltArm) {
+    New-STLsPackage -Name "LiftPodTiltArm" -MainFile $TiltArmFile -LibFiles $libFiles -ParametersFile $TiltArmParamsFile -Version $vTiltArm
 }
