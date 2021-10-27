@@ -48,6 +48,7 @@ Best way to do that is to measure the length of the VESA mount screw that came w
 These are mainly to ease a bit the printing process. Depending on your print settings these can help or hinder with prinitng - it depends for example - wether you use External Plate or not.
 
 Experiment with your print settings and check what works best with your slicer/printer.
+
 ![With Suppor Bars](pics/SupportBars.png)
 With support bars
 
